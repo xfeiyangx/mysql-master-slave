@@ -1,0 +1,34 @@
+version: "3"
+services:
+  mysql-master:
+    image: mysql:8.0
+    container_name: mysql-master
+    privileged: true
+    restart: "no"
+    volumes:
+      - ./master/db:/var/lib/mysql
+      - ./master/log:/var/log/mysql
+      - ./master/conf:/etc/mysql/conf.d
+      - ./master/init:/docker-entrypoint-initdb.d/
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3307:3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    
+  mysql-slave:
+    image: mysql:8.0
+    container_name: mysql-slave
+    privileged: true
+    restart: "no"
+    volumes:
+      - ./slave/db:/var/lib/mysql
+      - ./slave/log:/var/log/mysql
+      - ./slave/conf:/etc/mysql/conf.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3308:3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    
+    
